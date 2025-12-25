@@ -44,9 +44,25 @@
     </p>
 </div>
 
-<header>
-    <div class="menu-icon" onclick="toggleMenu()">☰</div>
-    <h1>حقيبة المؤمن</h1>
+<header class="main-header royal-bg">
+    <div class="header-ornament left"></div>
+    <div class="header-content">
+        <h1 class="main-title">حقيبة المؤمن</h1>
+        <p class="subtitle">الإصدار الملكي 2025</p>
+    </div>
+    <div class="header-ornament right"></div>
+</header>
+
+<div id="daily-ayah-container" class="royal-card">
+    <div class="card-overlay"></div>
+    <div class="card-content">
+        <div class="royal-header">✨ <span class="daily-label">آية اليوم</span> ✨</div>
+        <div id="daily-text" class="ayah-text">جاري جلب الآية الكريمة...</div>
+        <div id="daily-ref" class="ayah-ref"></div>
+        <button onclick="copyDailyAyah()" class="copy-gold-btn">📋 نسخ الآية</button>
+    </div>
+</div>
+
 
     <div class="main-nav">
         <button id="quranTab" class="active" onclick="switchMainTab('quran')">القرآن الكريم</button>
