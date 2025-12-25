@@ -62,7 +62,16 @@
 
 <!-- ================= القرآن ================= -->
 <div id="quran-section">
-    <div id="main-view">
+    <div id="daily-content" class="daily-card">
+        <div class="daily-header">
+            <span class="daily-icon">📖</span>
+            <span class="daily-title">آية اليوم</span>
+        </div>
+        <p id="daily-text" class="daily-text">جاري تحميل الآية...</p>
+        <small id="daily-ref" class="daily-ref"></small>
+        <button onclick="copyDailyAyah()" class="copy-btn">نسخ الآية 📋</button>
+    </div>
+    <div id="main-view"> ```
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="ابحث عن سورة..." onkeyup="filterSurahs()">
         </div>
