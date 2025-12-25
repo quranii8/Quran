@@ -286,3 +286,25 @@ body.dark-mode .daily-text {
     color: var(--dark-teal);
     box-shadow: 0 0 10px var(--gold);
 }
+/* تنسيق تحدي الختمة */
+.khatma-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    margin: 20px auto;
+    max-width: 90%;
+    border: 1px solid var(--gold);
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.khatma-options {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.khatma-options button {
+    min-width: 80px;
+    font-family: 'Amiri', serif;
+}
+
