@@ -276,3 +276,13 @@ body.dark-mode .daily-card {
 body.dark-mode .daily-text {
     color: #e0e0e0;
 }
+/* تنسيق زر تنبيهات الأذان */
+#notifBtn {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+#notifBtn.enabled {
+    background: var(--gold);
+    color: var(--dark-teal);
+    box-shadow: 0 0 10px var(--gold);
+}
