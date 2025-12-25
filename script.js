@@ -452,3 +452,71 @@ function copyDailyAyah() {
 // تشغيل الدالة تلقائياً عند تحميل الصفحة
 window.addEventListener('DOMContentLoaded', loadDailyAyah);
 
+// 1. طلب إذن الإشعارات من المستخدم
+function requestNotificationPermission() {
+    if (!("Notification" in window)) {
+        alert("عذراً، متصفحك لا يدعم الإشعارات");
+        return;
+    }
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            document.getElementById('notifBtn').classList.add('enabled');
+            alert("تم تفعيل تنبيهات الأذان بنجاح ✅ (سيصلك الإشعار عند وقت الصلاة)");
+        } else {
+            alert("يجب السماح بالإشعارات لكي يعمل المنبه");
+        }
+    });
+}
+
+// 2. دالة إرسال الإشعار وتشغيل صوت الأذان
+function triggerAzanNotification(prayerName) {
+    if (Notification.permission === "granted") {
+        // إرسال الإشعار المرئي
+        new Notification("حقيبة المؤمن", {
+            body: `حان الآن موعد أذان ${prayerName}`,
+            icon: "https://cdn-icons-png.flaticon.com/512/2972/2972331.png" // أيقونة إسلامية
+        });
+
+        // تشغيل صوت الأذان
+        const azan = document.getElementById('azanSound');
+        if (azan) {
+            azan.currentTime = 0; // البدء من أول الملف الصوتي
+            azan.play().catch(e => {
+                console.log("تنبيه: المتصفح يتطلب ضغطة واحدة من المستخدم في الموقع لتفعيل الصوت تلقائياً.");
+            });
+            
+            // إيقاف الأذان تلقائياً بعد دقيقة واحدة (60000 مللي ثانية)
+            setTimeout(() => {
+                azan.pause();
+                azan.currentTime = 0;
+            }, 60000);
+        }
+    }
+}
+
+// 3. المحرك (يفحص كل 60 ثانية إذا كان الوقت الحالي يطابق وقت الصلاة)
+setInterval(() => {
+    const now = new Date();
+    const currentTime = now.getHours().toString().padStart(2, '0') + ":" + 
+                        now.getMinutes().toString().padStart(2, '0');
+
+    // جلب أوقات الصلاة من العناصر الموجودة في صفحتك
+    const prayerTimes = {
+        "الفجر": document.getElementById('fajr-time')?.innerText,
+        "الظهر": document.getElementById('dhuhr-time')?.innerText,
+        "العصر": document.getElementById('asr-time')?.innerText,
+        "المغرب": document.getElementById('maghrib-time')?.innerText,
+        "العشاء": document.getElementById('isha-time')?.innerText
+    };
+
+    for (let name in prayerTimes) {
+        if (prayerTimes[name] === currentTime) {
+            // التحقق لمنع تكرار الإشعار في نفس الدقيقة
+            if (window.lastNotifiedPrayer !== name + currentTime) {
+                triggerAzanNotification(name);
+                window.lastNotifiedPrayer = name + currentTime;
+            }
+        }
+    }
+}, 60000);
+
