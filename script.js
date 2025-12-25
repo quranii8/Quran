@@ -519,4 +519,25 @@ setInterval(() => {
         }
     }
 }, 60000);
+// دالة حساب خطة الختمة
+function calculateKhatma(days) {
+    const totalPages = 604; // عدد صفحات المصحف
+    const pagesPerDay = Math.ceil(totalPages / days);
+    
+    const resultDiv = document.getElementById('khatma-result');
+    const planText = document.getElementById('khatma-plan');
+    const hintText = document.getElementById('daily-pages-hint');
+    const progressBar = document.getElementById('khatma-bar');
+
+    resultDiv.style.display = 'block';
+    planText.innerHTML = `لختم القرآن في <b>${days}</b> يومًا:`;
+    hintText.innerText = `عليك قراءة ${pagesPerDay} صفحة يومياً`;
+    
+    // تحريك شريط التقدم كأثر بصري جمالي
+    progressBar.style.width = "0%";
+    setTimeout(() => { progressBar.style.width = "100%"; }, 100);
+
+    // تنبيه بسيط
+    alert(`تم تحديد خطة الختمة: ${pagesPerDay} صفحة يومياً. استعن بالله وابدأ!`);
+}
 
