@@ -422,3 +422,32 @@ function switchMainTab(t) {
     if(t === 'qibla') getQibla();
     if(t === 'prayer') fetchPrayers();
 }
+// دالة جلب آية اليوم بناءً على تاريخ اليوم
+async function loadDailyAyah() {
+    try {
+        const now = new Date();
+        // استخدام رقم اليوم في السنة للحصول على آية متجددة يومياً
+        const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+        
+        const response = await fetch(`https://api.alquran.cloud/v1/ayah/${dayOfYear}/ar.alafasy`);
+        const data = await response.json();
+        
+        if(data.code === 200) {
+            document.getElementById('daily-text').innerText = data.data.text;
+            document.getElementById('daily-ref').innerText = `[سورة ${data.data.surah.name} - آية ${data.data.numberInSurah}]`;
+        }
+    } catch (error) {
+        document.getElementById('daily-text').innerText = "فذكر بالقرآن من يخاف وعيد";
+    }
+}
+
+// دالة نسخ الآية
+function copyDailyAyah() {
+    const text = document.getElementById('daily-text').innerText;
+    const ref = document.getElementById('daily-ref').innerText;
+    navigator.clipboard.writeText(text + " " + ref);
+    alert("تم نسخ الآية بنجاح");
+}
+
+// تشغيل الدالة تلقائياً عند تحميل الصفحة
+window.addEventListener('DOMContentLoaded', loadDailyAyah);
