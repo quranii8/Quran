@@ -35,6 +35,11 @@
     <button class="menu-tool-btn" onclick="getQibla()">📍</button>
 </div>
 
+<div class="menu-item">
+    <span>تنبيهات الأذان</span>
+    <button id="notifBtn" class="menu-tool-btn" onclick="requestNotificationPermission()">🔔</button>
+</div>
+
 </div>
 
     </div>
@@ -195,5 +200,7 @@
 
 <audio id="notificationSound" src="https://www.soundjay.com/buttons/sounds/button-37a.mp3"></audio>
 <script src="script.js"></script>
+<audio id="azanSound" src="https://www.islamcan.com/common/makkah.mp3" preload="auto"></audio>
+
 </body>
 </html>
