@@ -451,28 +451,4 @@ function copyDailyAyah() {
 
 // تشغيل الدالة تلقائياً عند تحميل الصفحة
 window.addEventListener('DOMContentLoaded', loadDailyAyah);
-// دالة جلب آية اليوم وتحديثها تلقائياً
-async function loadDailyAyah() {
-    try {
-        const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-        const response = await fetch(`https://api.alquran.cloud/v1/ayah/${dayOfYear}/ar.alafasy`);
-        const data = await response.json();
-        if(data.code === 200) {
-            document.getElementById('daily-text').innerText = `﴿ ${data.data.text} ﴾`;
-            document.getElementById('daily-ref').innerText = `[ سورة ${data.data.surah.name} - آية ${data.data.numberInSurah} ]`;
-        }
-    } catch (e) {
-        document.getElementById('daily-text').innerText = "﴿ فاصبر صبراً جميلاً ﴾";
-    }
-}
-
-function copyDailyAyah() {
-    const text = document.getElementById('daily-text').innerText;
-    const ref = document.getElementById('daily-ref').innerText;
-    navigator.clipboard.writeText(text + " " + ref);
-    alert("تم نسخ الآية");
-}
-
-// تشغيل الدالة فور تحميل الموقع
-window.addEventListener('DOMContentLoaded', loadDailyAyah);
 
