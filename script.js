@@ -1,3 +1,4 @@
+let currentPage = parseInt(localStorage.getItem('lastPaperPage')) || 1;
 let allSurahs = [], currentSurahId = 1;
 let isMuted = localStorage.getItem('isMuted') === 'true';
 const audio = document.getElementById('audioPlayer');
@@ -608,30 +609,54 @@ function filterSurahsByList(surahIds, title) {
 renderTopics();
 
 function switchMainTab(tab) {
-    // الأسطر الموجودة عندك أصلاً لإخفاء الأقسام
-    document.getElementById('quran-section').style.display = (tab === 'quran') ? 'block' : 'none';
-    document.getElementById('azkar-section').style.display = (tab === 'azkar') ? 'block' : 'none';
-    document.getElementById('sebha-section').style.display = (tab === 'sebha') ? 'block' : 'none';
-    document.getElementById('prayer-section').style.display = (tab === 'prayer') ? 'block' : 'none';
-    document.getElementById('qibla-section').style.display = (tab === 'qibla') ? 'block' : 'none';
+    // 1. قائمة بكل الأقسام الموجودة عندك
+    const sections = [
+        'quran-section', 
+        'azkar-section', 
+        'sebha-section', 
+        'prayer-section', 
+        'qibla-section', 
+        'topics-section', 
+        'paper-section'
+    ];
 
-    // === أضف هذا السطر الجديد هنا ===
-    document.getElementById('topics-section').style.display = (tab === 'topics') ? 'block' : 'none';
-document.getElementById('paper-section').style.display = (tab === 'paper') ? 'block' : 'none';
+    // 2. إخفاء الجميع أولاً (تنظيف الشاشة)
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
 
-    // كود تحديث شكل الأزرار (Active) الموجود عندك
+    // 3. إظهار القسم الذي اخترته فقط
+    if (tab === 'quran') {
+        document.getElementById('quran-section').style.display = 'block';
+    } else {
+        const target = document.getElementById(tab + '-section');
+        if (target) target.style.display = 'block';
+    }
+
+    // 4. تحديث شكل الأزرار (Active)
     const buttons = document.querySelectorAll('.main-nav button');
     buttons.forEach(btn => btn.classList.remove('active'));
-    if(document.getElementById(tab + 'Tab')) {
-        document.getElementById(tab + 'Tab').classList.add('active');
+
+    // لو المختار (مصحف، فهرس، أو ورقي) اجعل زر القرآن هو المنور
+    if (['quran', 'topics', 'paper'].includes(tab)) {
+        document.getElementById('quranTab')?.classList.add('active');
+    } else {
+        document.getElementById(tab + 'Tab')?.classList.add('active');
     }
+    
+    // 5. تشغيل تحديث الورقي والقبلة آلياً عند فتحهما
+    if (tab === 'paper') updatePageDisplay();
+    if (tab === 'qibla') getQibla();
+}
 }
 let currentPage = 1;
 
 function updatePageDisplay() {
     const pageImg = document.getElementById('quranPageImg');
     const pageNumLabel = document.getElementById('pageNumber');
-    
+    localStorage.setItem('lastPaperPage', currentPage); // حفظ الصفحة تلقائياً
+
     if (pageImg && pageNumLabel) {
         // جلب الصور من السيرفر الموثوق
         const folderNum = Math.ceil(currentPage / 100);
