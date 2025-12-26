@@ -131,6 +131,24 @@
     </div>
     <div class="surah-grid" id="topicsGrid"></div>
 </div>
+<div id="paper-section" class="tab-content" style="display:none; text-align:center;">
+    <div class="paper-container">
+        <div class="paper-controls">
+            <button onclick="changePage(1)" class="page-btn">السابق ⮕</button>
+            <span id="pageNumber">صفحة: 1</span>
+            <button onclick="changePage(-1)" class="page-btn">⬅ التالي</button>
+        </div>
+        
+        <div class="quran-page-wrapper">
+            <img id="quranPageImg" src="https://archive.org/download/quran-images-1/1.png" alt="صفحة المصحف">
+        </div>
+        
+        <div class="jump-to">
+            <input type="number" id="pageInput" placeholder="رقم الصفحة..." min="1" max="604">
+            <button onclick="jumpToPage()" class="jump-btn">اذهب</button>
+        </div>
+    </div>
+</div>
 
 <!-- ================= الأذكار ================= -->
 <div id="azkar-section" style="display:none;">
