@@ -625,3 +625,39 @@ function switchMainTab(tab) {
         document.getElementById(tab + 'Tab').classList.add('active');
     }
 }
+let currentPage = 1;
+
+function changePage(step) {
+    currentPage += step;
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > 604) currentPage = 604;
+    updatePageDisplay();
+}
+
+function jumpToPage() {
+    const val = document.getElementById('pageInput').value;
+    if (val >= 1 && val <= 604) {
+        currentPage = parseInt(val);
+        updatePageDisplay();
+    }
+}
+
+function updatePageDisplay() {
+    document.getElementById('quranPageImg').src = `https://archive.org/download/quran-images-${Math.ceil(currentPage/100)}/${currentPage}.png`;
+    document.getElementById('pageNumber').innerText = `صفحة: ${currentPage}`;
+    window.scrollTo(0, 0); // للعودة لأعلى الصفحة عند التقليب
+}
+
+// تعديل دالة الاختيار لتشمل "paper"
+function selectQuranOption(type) {
+    document.getElementById("quranDropdown").classList.remove("show-dropdown");
+    if (type === 'paper') {
+        switchMainTab('paper');
+    } else if (type === 'quran') {
+        switchMainTab('quran');
+        showMain();
+    } else {
+        switchMainTab('topics');
+    }
+}
+
