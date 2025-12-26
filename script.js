@@ -628,6 +628,19 @@ document.getElementById('paper-section').style.display = (tab === 'paper') ? 'bl
 }
 let currentPage = 1;
 
+function updatePageDisplay() {
+    const pageImg = document.getElementById('quranPageImg');
+    const pageNumLabel = document.getElementById('pageNumber');
+    
+    if (pageImg && pageNumLabel) {
+        // جلب الصور من السيرفر الموثوق
+        const folderNum = Math.ceil(currentPage / 100);
+        pageImg.src = `https://archive.org/download/quran-images-${folderNum}/${currentPage}.png`;
+        pageNumLabel.innerText = `صفحة: ${currentPage}`;
+        window.scrollTo(0, 0); // رفع الصفحة للأعلى عند التقليب
+    }
+}
+
 function changePage(step) {
     currentPage += step;
     if (currentPage < 1) currentPage = 1;
@@ -643,22 +656,4 @@ function jumpToPage() {
     }
 }
 
-function updatePageDisplay() {
-    document.getElementById('quranPageImg').src = `https://archive.org/download/quran-images-${Math.ceil(currentPage/100)}/${currentPage}.png`;
-    document.getElementById('pageNumber').innerText = `صفحة: ${currentPage}`;
-    window.scrollTo(0, 0); // للعودة لأعلى الصفحة عند التقليب
-}
-
-// تعديل دالة الاختيار لتشمل "paper"
-function selectQuranOption(type) {
-    document.getElementById("quranDropdown").classList.remove("show-dropdown");
-    if (type === 'paper') {
-        switchMainTab('paper');
-    } else if (type === 'quran') {
-        switchMainTab('quran');
-        showMain();
-    } else {
-        switchMainTab('topics');
-    }
-}
 
