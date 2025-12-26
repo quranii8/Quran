@@ -54,22 +54,15 @@
     <h1>حقيبة المؤمن</h1>
     
     <div class="main-nav">
-        <div class="quran-menu-wrapper" style="display:inline-block; vertical-align: middle;">
-            <button id="quranTab" class="active dropbtn" onclick="toggleQuranDropdown(event)">القرآن الكريم ▾</button>
-            <div id="quranDropdown" class="dropdown-content">
-                <a href="javascript:void(0)" onclick="selectQuranOption('quran')">المصحف الصوتي</a>
-                <a href="javascript:void(0)" onclick="selectQuranOption('topics')">الفهرس الموضوعي</a>
-                <a href="javascript:void(0)" onclick="selectQuranOption('paper')">المصحف الورقي (قراءة)</a>
-            </div>
-        </div>
-
+        <button id="quranTab" class="active" onclick="switchMainTab('quran')">القرآن الكريم</button>
         <button id="azkarTab" onclick="switchMainTab('azkar')">قسم الأذكار</button>
         <button id="sebhaTab" onclick="switchMainTab('sebha')">السبحة</button>
         <button id="prayerTab" onclick="switchMainTab('prayer')">مواقيت الصلاة</button>
-        <button id="qiblaTab" onclick="switchMainTab('qibla')">اتجاه القبلة</button>
+<button id="qiblaTab" onclick="switchMainTab('qibla')">اتجاه القبلة</button>
+<button id="topicsTab" onclick="switchMainTab('topics')">الفهرس الموضوعي 📚</button>
+
     </div>
 </header>
-
 
 <div class="container">
 
@@ -127,26 +120,56 @@
     </div>
 </div>
 <div id="topics-section" class="tab-content" style="display:none;">
-    <div class="search-box">
-        <h2 style="text-align:center; color:var(--gold); font-family:'Amiri'; margin:20px 0;">الفهرس الموضوعي</h2>
-    </div>
-    <div class="surah-grid" id="topicsGrid"></div>
-</div>
-<div id="paper-section" class="tab-content" style="display:none; text-align:center;">
-    <div class="paper-container">
-        <div class="paper-controls">
-            <button onclick="changePage(1)" class="page-btn">السابق ⮕</button>
-            <span id="pageNumber">صفحة: 1</span>
-            <button onclick="changePage(-1)" class="page-btn">⬅ التالي</button>
+    <div class="topics-grid">
+        <div class="topic-card" onclick="openTopic('تحصين')">
+            <span class="topic-icon">🛡️</span>
+            <h3>التحصين والحفظ</h3>
+            <p>للحماية والوقاية والبركة</p>
         </div>
-        
-        <div class="quran-page-wrapper">
-            <img id="quranPageImg" src="https://archive.org/download/quran-images-1/1.png" alt="صفحة المصحف">
+        <div class="topic-card" onclick="openTopic('سكينة')">
+            <span class="topic-icon">✨</span>
+            <h3>السكينة والطمأنينة</h3>
+            <p>لراحة القلب وضيق الصدر</p>
         </div>
-        
-        <div class="jump-to">
-            <input type="number" id="pageInput" placeholder="رقم الصفحة..." min="1" max="604">
-            <button onclick="jumpToPage()" class="jump-btn">اذهب</button>
+        <div class="topic-card" onclick="openTopic('رزق')">
+            <span class="topic-icon">💰</span>
+            <h3>طلب الرزق والبركة</h3>
+            <p>سور تُقرأ بنية سعة الرزق</p>
+        </div>
+        <div class="topic-card" onclick="openTopic('صبر')">
+            <span class="topic-icon">⏳</span>
+            <h3>الصبر والفرج</h3>
+            <p>آيات تخفف المحن وتبشر بالفرج</p>
+        </div>
+        <div class="topic-card" onclick="openTopic('دعاء')">
+            <span class="topic-icon">🤲</span>
+            <h3>أدعية الأنبياء</h3>
+            <p>سور اشتملت على عظيم الدعاء</p>
+        </div>
+        <div class="topic-card" onclick="openTopic('قصص')">
+            <span class="topic-icon">📖</span>
+            <h3>قصص الأنبياء</h3>
+            <p>دروس وعبر من حياة المرسلين</p>
+        </div>
+        <div class="topic-card" onclick="openTopic('أخلاق')">
+            <span class="topic-icon">🤝</span>
+            <h3>الأدب والأخلاق</h3>
+            <p>منهج المسلم في التعامل</p>
+        </div>
+        <div class="topic-card" onclick="openTopic('يوم_القيامة')">
+            <span class="topic-icon">☁️</span>
+            <h3>أهوال القيامة</h3>
+            <p>للتذكرة والاستعداد للآخرة</p>
+        </div>
+        <div class="topic-card" onclick="openTopic('عبادات')">
+            <span class="topic-icon">🕌</span>
+            <h3>أحكام العبادات</h3>
+            <p>سور الأحكام والتشريعات</p>
+        </div>
+        <div class="topic-card" onclick="openTopic('تأمل')">
+            <span class="topic-icon">🌍</span>
+            <h3>تأملات كونية</h3>
+            <p>عظمة الخالق في الكون</p>
         </div>
     </div>
 </div>
