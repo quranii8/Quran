@@ -550,4 +550,60 @@ window.onclick = function(event) {
         }
     }
 }
+const quranTopics = [
+    { title: "التحصين والحفظ", icon: "🛡️", surahs: [1, 2, 112, 113, 114], desc: "الفاتحة، البقرة، والمعوذات" },
+    { title: "السكينة والطمأنينة", icon: "✨", surahs: [36, 55, 56, 67, 94], desc: "يس، الرحمن، الملك، الشرح" },
+    { title: "طلب الرزق والبركة", icon: "💰", surahs: [51, 56, 65, 93, 108], desc: "الواقعة، الطلاق، الضحى، الكوثر" },
+    { title: "قصص الأنبياء", icon: "📖", surahs: [12, 18, 19, 20, 28], desc: "يوسف، الكهف، مريم، طه، القصص" },
+    { title: "الدعاء المستجاب", icon: "🤲", surahs: [21, 27, 37, 71], desc: "الأنبياء، النمل، الصافات، نوح" },
+    { title: "أهوال القيامة", icon: "☁️", surahs: [75, 78, 81, 82, 99, 101], desc: "القيامة، النبأ، التكوير، القارعة" },
+    { title: "الأخلاق والآداب", icon: "🤝", surahs: [17, 31, 49, 107], desc: "الإسراء، لقمان، الحجرات، الماعون" },
+    { title: "الصبر والفرج", icon: "⏳", surahs: [11, 12, 94, 103], desc: "هود، يوسف، الشرح، العصر" },
+    { title: "التفكر في الكون", icon: "🌍", surahs: [13, 16, 67, 88], desc: "الرعد، النحل، الملك، الغاشية" },
+    { title: "أحكام العبادات", icon: "🕌", surahs: [3, 22, 24, 62], desc: "آل عمران، الحج، النور، الجمعة" }
+];
+
+function renderTopics() {
+    const grid = document.getElementById('topicsGrid');
+    if(!grid) return;
+    grid.innerHTML = ''; 
+
+    quranTopics.forEach(topic => {
+        const card = document.createElement('div');
+        card.className = 'surah-card'; // نفس كلاس بطاقات السور الأصلية
+        card.onclick = () => filterSurahsByList(topic.surahs, topic.title);
+
+        card.innerHTML = `
+            <div class="surah-info">
+                <div class="surah-num">${topic.icon}</div>
+                <div class="surah-details">
+                    <h3>${topic.title}</h3>
+                    <p style="font-size:11px; opacity:0.8;">${topic.desc}</p>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function filterSurahsByList(surahIds, title) {
+    switchMainTab('quran');
+    const cards = document.querySelectorAll('#surahList .surah-card');
+    cards.forEach((card, index) => {
+        card.style.display = surahIds.includes(index + 1) ? 'flex' : 'none';
+    });
+
+    if(!document.getElementById('backToTopics')) {
+        const btn = document.createElement('button');
+        btn.id = 'backToTopics';
+        btn.innerHTML = `↩ عودة للفهرس (${title})`;
+        btn.className = 'modern-back-btn';
+        btn.style.margin = '15px auto';
+        btn.onclick = () => { switchMainTab('topics'); btn.remove(); };
+        document.getElementById('main-view').prepend(btn);
+    }
+}
+
+// تشغيل الدالة فور تحميل الصفحة
+renderTopics();
 
