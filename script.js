@@ -535,35 +535,10 @@ const topicData = {
 };
 
 function openTopic(topic) {
-    // 1. الانتقال لقسم القرآن
-    switchMainTab('quran'); 
-    
-    // 2. تصفية السور بناءً على المصفوفة
-    const selectedSurahs = topicData[topic];
-    const allSurahs = document.querySelectorAll('.surah-card');
-    
-    allSurahs.forEach((card, index) => {
-        const id = index + 1;
-        if (selectedSurahs && selectedSurahs.includes(id)) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
+    if(typeof switchMainTab === 'function') switchMainTab('quran');
+    const selected = topicData[topic];
+    const cards = document.querySelectorAll('.surah-card');
+    cards.forEach((card, i) => {
+        card.style.display = (selected && selected.includes(i + 1)) ? 'flex' : 'none';
     });
-
-    // 3. إضافة زر للعودة لكل السور (يظهر فوق قائمة السور)
-    if (!document.getElementById('clearTopicBtn')) {
-        const clearBtn = document.createElement('button');
-        clearBtn.id = 'clearTopicBtn';
-        clearBtn.innerHTML = '⬅️ العودة لكل السور';
-        clearBtn.className = 'modern-back-btn';
-        clearBtn.style.display = 'block';
-        clearBtn.style.margin = '10px auto';
-        clearBtn.onclick = () => {
-            allSurahs.forEach(c => c.style.display = 'flex');
-            clearBtn.remove();
-        };
-        document.getElementById('surahList').prepend(clearBtn);
-    }
 }
-
