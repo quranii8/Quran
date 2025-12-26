@@ -528,16 +528,19 @@ function toggleQuranDropdown(event) {
 
 // دالة اختيار الخيار (المصحف أو الفهرس)
 function selectQuranOption(type) {
-    // إخفاء القائمة بعد الاختيار
     document.getElementById("quranDropdown").classList.remove("show-dropdown");
     
-    if (type === 'quran') {
-        switchMainTab('quran'); // يفتح المصحف الأصلي
-        showMain(); // للتأكد من أنه يعرض قائمة السور
+    if (type === 'paper') {
+        switchMainTab('paper');
+        updatePageDisplay(); // هذا هو السطر الضروري لظهور الصورة فوراً
+    } else if (type === 'topics') {
+        switchMainTab('topics');
     } else {
-        switchMainTab('topics'); // سنقوم بتجهيز قسم الفهرس لهذا الأمر
+        switchMainTab('quran');
+        showMain();
     }
 }
+
 
 // إغلاق القائمة إذا ضغط المستخدم في أي مكان خارجها
 window.onclick = function(event) {
