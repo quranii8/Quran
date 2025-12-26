@@ -1,4 +1,3 @@
-let currentPage = parseInt(localStorage.getItem('lastPaperPage')) || 1;
 let allSurahs = [], currentSurahId = 1;
 let isMuted = localStorage.getItem('isMuted') === 'true';
 const audio = document.getElementById('audioPlayer');
@@ -251,7 +250,14 @@ function resetSebhaAutomated() {
 
 setInterval(updateCountdown, 1000);
 
-// --- 6. الوضع الداكن والخط والتبديل ---}
+// --- 6. الوضع الداكن والخط والتبديل ---
+function switchMainTab(t) {
+    document.querySelectorAll('.main-nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(t + 'Tab').classList.add('active');
+    ['quran-section', 'azkar-section', 'sebha-section'].forEach(s => { 
+        document.getElementById(s).style.display = s.startsWith(t) ? 'block' : 'none'; 
+    });
+}
 
 function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
 function changeFontSize(d) { 
@@ -402,7 +408,20 @@ function handleCompass(e) {
     }
 }
 
-// دالة التبديل الشاملة (تأكد أنها الوحيدة في المل}
+// دالة التبديل الشاملة (تأكد أنها الوحيدة في الملف)
+function switchMainTab(t) {
+    document.querySelectorAll('.main-nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(t + 'Tab')?.classList.add('active');
+
+    const allSections = ['quran-section', 'azkar-section', 'sebha-section', 'prayer-section', 'qibla-section'];
+    allSections.forEach(s => {
+        const el = document.getElementById(s);
+        if (el) el.style.display = s.startsWith(t) ? 'block' : 'none';
+    });
+    
+    if(t === 'qibla') getQibla();
+    if(t === 'prayer') fetchPrayers();
+}
 // دالة جلب آية اليوم بناءً على تاريخ اليوم
 async function loadDailyAyah() {
     try {
@@ -508,19 +527,16 @@ function toggleQuranDropdown(event) {
 
 // دالة اختيار الخيار (المصحف أو الفهرس)
 function selectQuranOption(type) {
+    // إخفاء القائمة بعد الاختيار
     document.getElementById("quranDropdown").classList.remove("show-dropdown");
     
-    if (type === 'paper') {
-        switchMainTab('paper');
-        updatePageDisplay(); // هذا هو السطر الضروري لظهور الصورة فوراً
-    } else if (type === 'topics') {
-        switchMainTab('topics');
+    if (type === 'quran') {
+        switchMainTab('quran'); // يفتح المصحف الأصلي
+        showMain(); // للتأكد من أنه يعرض قائمة السور
     } else {
-        switchMainTab('quran');
-        showMain();
+        switchMainTab('topics'); // سنقوم بتجهيز قسم الفهرس لهذا الأمر
     }
 }
-
 
 // إغلاق القائمة إذا ضغط المستخدم في أي مكان خارجها
 window.onclick = function(event) {
@@ -591,104 +607,21 @@ function filterSurahsByList(surahIds, title) {
 // تشغيل الدالة فور تحميل الصفحة
 renderTopics();
 
-    // 4. تحديث شكل الأزرار (Active)
+function switchMainTab(tab) {
+    // الأسطر الموجودة عندك أصلاً لإخفاء الأقسام
+    document.getElementById('quran-section').style.display = (tab === 'quran') ? 'block' : 'none';
+    document.getElementById('azkar-section').style.display = (tab === 'azkar') ? 'block' : 'none';
+    document.getElementById('sebha-section').style.display = (tab === 'sebha') ? 'block' : 'none';
+    document.getElementById('prayer-section').style.display = (tab === 'prayer') ? 'block' : 'none';
+    document.getElementById('qibla-section').style.display = (tab === 'qibla') ? 'block' : 'none';
+
+    // === أضف هذا السطر الجديد هنا ===
+    document.getElementById('topics-section').style.display = (tab === 'topics') ? 'block' : 'none';
+
+    // كود تحديث شكل الأزرار (Active) الموجود عندك
     const buttons = document.querySelectorAll('.main-nav button');
     buttons.forEach(btn => btn.classList.remove('active'));
-
-    // لو المختار (مصحف، فهرس، أو ورقي) اجعل زر القرآن هو المنور
-    if (['quran', 'topics', 'paper'].includes(tab)) {
-        document.getElementById('quranTab')?.classList.add('active');
-    } else {
-        document.getElementById(tab + 'Tab')?.classList.add('active');
-    }
-    
-    // 5. تشغيل تحديث الورقي والقبلة آلياً عند فتحهما
-    if (tab === 'paper') updatePageDisplay();
-    if (tab === 'qibla') getQibla();
-}
-}
-let currentPage = 1;
-
-function updatePageDisplay() {
-    const pageImg = document.getElementById('quranPageImg');
-    const pageNumLabel = document.getElementById('pageNumber');
-    localStorage.setItem('lastPaperPage', currentPage); // حفظ الصفحة تلقائياً
-
-    if (pageImg && pageNumLabel) {
-        // جلب الصور من السيرفر الموثوق
-        const folderNum = Math.ceil(currentPage / 100);
-        pageImg.src = `https://archive.org/download/quran-images-${folderNum}/${currentPage}.png`;
-        pageNumLabel.innerText = `صفحة: ${currentPage}`;
-        window.scrollTo(0, 0); // رفع الصفحة للأعلى عند التقليب
+    if(document.getElementById(tab + 'Tab')) {
+        document.getElementById(tab + 'Tab').classList.add('active');
     }
 }
-
-function changePage(step) {
-    currentPage += step;
-    if (currentPage < 1) currentPage = 1;
-    if (currentPage > 604) currentPage = 604;
-    updatePageDisplay();
-}
-
-function jumpToPage() {
-    const val = document.getElementById('pageInput').value;
-    if (val >= 1 && val <= 604) {
-        currentPage = parseInt(val);
-        updatePageDisplay();
-    }
-}
-function switchMainTab(tab) {
-    // 1. قائمة بجميع الأقسام الموجودة في الـ HTML الخاص بك
-    const sections = [
-        'quran-section', 
-        'azkar-section', 
-        'sebha-section', 
-        'prayer-section', 
-        'qibla-section', 
-        'topics-section', 
-        'paper-section'
-    ];
-
-    // 2. إخفاء جميع الأقسام (تصفير الشاشة)
-    sections.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.style.display = 'none';
-        }
-    });
-
-    // 3. تحديد وإظهار القسم المطلوب
-    // ملاحظة: قسم القرآن الأساسي اسمه 'quran-section' والبقية تنتهي بـ '-section'
-    const targetId = (tab === 'quran') ? 'quran-section' : (tab + '-section');
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-        targetElement.style.display = 'block';
-    }
-
-    // 4. تحديث شكل الأزرار في التنقل العلوي (Navigation)
-    const allNavButtons = document.querySelectorAll('.main-nav button');
-    allNavButtons.forEach(btn => btn.classList.remove('active'));
-
-    // لو المختار (مصحف صَوْتي، فهرس موضوعي، أو مصحف ورقي) اجعل زر "القرآن الكريم" هو النشط
-    if (['quran', 'topics', 'paper'].includes(tab)) {
-        const quranBtn = document.getElementById('quranTab');
-        if (quranBtn) quranBtn.classList.add('active');
-    } else {
-        // للأقسام الأخرى (أذكار، سبحة، إلخ)
-        const activeBtn = document.getElementById(tab + 'Tab');
-        if (activeBtn) activeBtn.classList.add('active');
-    }
-
-    // 5. تشغيل الوظائف التلقائية عند فتح أقسام معينة
-    if (tab === 'paper') {
-        if (typeof updatePageDisplay === 'function') updatePageDisplay();
-    }
-    if (tab === 'qibla') {
-        if (typeof getQibla === 'function') getQibla();
-    }
-    if (tab === 'prayer') {
-        if (typeof fetchPrayers === 'function') fetchPrayers();
-    }
-}
-
-
