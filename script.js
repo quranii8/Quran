@@ -520,4 +520,50 @@ setInterval(() => {
     }
 }, 60000);
 
+// بيانات الفهرس الموضوعي (أرقام السور)
+const topicData = {
+    'تحصين': [1, 2, 112, 113, 114],
+    'سكينة': [36, 55, 56, 67, 94],
+    'قصص': [12, 18, 19, 20, 28],
+    'عبادات': [3, 22, 24, 62],
+    'تأمل': [13, 16, 31, 88],
+    'رزق': [51, 56, 65, 93, 108],
+    'صبر': [2, 3, 11, 12, 103],
+    'دعاء': [1, 2, 3, 14, 21, 27],
+    'يوم_القيامة': [56, 75, 78, 81, 82, 101],
+    'أخلاق': [17, 31, 49, 107]
+};
+
+function openTopic(topic) {
+    // 1. الانتقال لقسم القرآن
+    switchMainTab('quran'); 
+    
+    // 2. تصفية السور بناءً على المصفوفة
+    const selectedSurahs = topicData[topic];
+    const allSurahs = document.querySelectorAll('.surah-card');
+    
+    allSurahs.forEach((card, index) => {
+        const id = index + 1;
+        if (selectedSurahs && selectedSurahs.includes(id)) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // 3. إضافة زر للعودة لكل السور (يظهر فوق قائمة السور)
+    if (!document.getElementById('clearTopicBtn')) {
+        const clearBtn = document.createElement('button');
+        clearBtn.id = 'clearTopicBtn';
+        clearBtn.innerHTML = '⬅️ العودة لكل السور';
+        clearBtn.className = 'modern-back-btn';
+        clearBtn.style.display = 'block';
+        clearBtn.style.margin = '10px auto';
+        clearBtn.onclick = () => {
+            allSurahs.forEach(c => c.style.display = 'flex');
+            clearBtn.remove();
+        };
+        document.getElementById('surahList').prepend(clearBtn);
+    }
+}
 
