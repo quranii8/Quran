@@ -286,7 +286,7 @@ body.dark-mode .daily-text {
     color: var(--dark-teal);
     box-shadow: 0 0 10px var(--gold);
 }
-/* تنسيق الزر المنسدل */
+/* تنسيق الزر المنسدل *//* تنسيق الزر المنسدل */
 .quran-menu-wrapper {
     position: relative;
     display: inline-block;
