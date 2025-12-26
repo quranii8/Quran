@@ -519,3 +519,35 @@ setInterval(() => {
         }
     }
 }, 60000);
+// دالة فتح وإغلاق القائمة عند الضغط على الزر
+function toggleQuranDropdown(event) {
+    event.stopPropagation();
+    document.getElementById("quranDropdown").classList.toggle("show-dropdown");
+}
+
+// دالة اختيار الخيار (المصحف أو الفهرس)
+function selectQuranOption(type) {
+    // إخفاء القائمة بعد الاختيار
+    document.getElementById("quranDropdown").classList.remove("show-dropdown");
+    
+    if (type === 'quran') {
+        switchMainTab('quran'); // يفتح المصحف الأصلي
+        showMain(); // للتأكد من أنه يعرض قائمة السور
+    } else {
+        switchMainTab('topics'); // سنقوم بتجهيز قسم الفهرس لهذا الأمر
+    }
+}
+
+// إغلاق القائمة إذا ضغط المستخدم في أي مكان خارجها
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show-dropdown')) {
+                openDropdown.classList.remove('show-dropdown');
+            }
+        }
+    }
+}
+
