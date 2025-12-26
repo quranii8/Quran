@@ -324,4 +324,20 @@ body.dark-mode .daily-text {
 .show-dropdown {
     display: block !important;
 }
+.paper-container { padding: 10px; background: #f4f1ea; border-radius: 15px; }
+.paper-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.page-btn { background: var(--dark-teal); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
+
+.quran-page-wrapper { 
+    background: white; 
+    padding: 10px; 
+    border: 5px solid #c5a059; /* إطار ذهبي */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    max-width: 100%;
+}
+
+.quran-page-wrapper img { width: 100%; height: auto; display: block; }
+.jump-to { margin-top: 15px; }
+.jump-btn { background: var(--gold); border: none; padding: 5px 10px; border-radius: 5px; }
 
