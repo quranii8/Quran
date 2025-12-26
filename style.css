@@ -341,3 +341,26 @@ body.dark-mode .daily-text {
 .jump-to { margin-top: 15px; }
 .jump-btn { background: var(--gold); border: none; padding: 5px 10px; border-radius: 5px; }
 
+/* إطار جمالي للمصحف الورقي */
+.quran-page-wrapper {
+    border: 8px solid #f4f1ea;
+    outline: 1px solid var(--gold);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    margin: 20px auto;
+    max-width: 95%;
+    background: white;
+}
+
+#quranPageImg {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* تحسين شكل أزرار التنقل */
+.paper-controls .modern-back-btn {
+    background: var(--dark-teal);
+    color: white;
+    border: 1px solid var(--gold);
+    padding: 10px 20px;
+    font-weight: bold;
+}
+
