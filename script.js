@@ -519,26 +519,3 @@ setInterval(() => {
         }
     }
 }, 60000);
-
-// بيانات الفهرس الموضوعي (أرقام السور)
-const topicData = {
-    'تحصين': [1, 2, 112, 113, 114],
-    'سكينة': [36, 55, 56, 67, 94],
-    'قصص': [12, 18, 19, 20, 28],
-    'عبادات': [3, 22, 24, 62],
-    'تأمل': [13, 16, 31, 88],
-    'رزق': [51, 56, 65, 93, 108],
-    'صبر': [2, 3, 11, 12, 103],
-    'دعاء': [1, 2, 3, 14, 21, 27],
-    'يوم_القيامة': [56, 75, 78, 81, 82, 101],
-    'أخلاق': [17, 31, 49, 107]
-};
-
-function openTopic(topic) {
-    if(typeof switchMainTab === 'function') switchMainTab('quran');
-    const selected = topicData[topic];
-    const cards = document.querySelectorAll('.surah-card');
-    cards.forEach((card, i) => {
-        card.style.display = (selected && selected.includes(i + 1)) ? 'flex' : 'none';
-    });
-}
