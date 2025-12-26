@@ -617,6 +617,7 @@ function switchMainTab(tab) {
 
     // === أضف هذا السطر الجديد هنا ===
     document.getElementById('topics-section').style.display = (tab === 'topics') ? 'block' : 'none';
+document.getElementById('paper-section').style.display = (tab === 'paper') ? 'block' : 'none';
 
     // كود تحديث شكل الأزرار (Active) الموجود عندك
     const buttons = document.querySelectorAll('.main-nav button');
