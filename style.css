@@ -286,27 +286,21 @@ body.dark-mode .daily-text {
     color: var(--dark-teal);
     box-shadow: 0 0 10px var(--gold);
 }
-/* تنسيق الفهرس الموضوعي */
 .topics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-    padding: 15px;
+    gap: 15px;
+    padding: 20px;
+    direction: rtl;
 }
 
 .topic-card {
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-bottom: 3px solid var(--gold); /* لمسة جمالية ذهبية */
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    border-bottom: 4px solid #c5a059;
     border-radius: 15px;
-    padding: 15px 10px;
+    padding: 20px 10px;
     text-align: center;
     cursor: pointer;
-    transition: 0.3s;
 }
-
-.topic-card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.topic-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
-.topic-card h3 { font-size: 1rem; color: var(--dark-teal); margin: 5px 0; }
-.topic-card p { font-size: 0.75rem; color: #777; line-height: 1.3; }
 
