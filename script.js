@@ -607,3 +607,21 @@ function filterSurahsByList(surahIds, title) {
 // تشغيل الدالة فور تحميل الصفحة
 renderTopics();
 
+function switchMainTab(tab) {
+    // الأسطر الموجودة عندك أصلاً لإخفاء الأقسام
+    document.getElementById('quran-section').style.display = (tab === 'quran') ? 'block' : 'none';
+    document.getElementById('azkar-section').style.display = (tab === 'azkar') ? 'block' : 'none';
+    document.getElementById('sebha-section').style.display = (tab === 'sebha') ? 'block' : 'none';
+    document.getElementById('prayer-section').style.display = (tab === 'prayer') ? 'block' : 'none';
+    document.getElementById('qibla-section').style.display = (tab === 'qibla') ? 'block' : 'none';
+
+    // === أضف هذا السطر الجديد هنا ===
+    document.getElementById('topics-section').style.display = (tab === 'topics') ? 'block' : 'none';
+
+    // كود تحديث شكل الأزرار (Active) الموجود عندك
+    const buttons = document.querySelectorAll('.main-nav button');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    if(document.getElementById(tab + 'Tab')) {
+        document.getElementById(tab + 'Tab').classList.add('active');
+    }
+}
