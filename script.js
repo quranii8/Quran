@@ -520,6 +520,7 @@ setInterval(() => {
     }
 }, 60000);
 // دالة فتح وإغلاق القائمة عند الضغط على الزر
+// دالة فتح وإغلاق القائمة عند الضغط على الزر
 function toggleQuranDropdown(event) {
     event.stopPropagation();
     document.getElementById("quranDropdown").classList.toggle("show-dropdown");
@@ -550,6 +551,7 @@ window.onclick = function(event) {
         }
     }
 }
+
 const quranTopics = [
     { title: "التحصين والحفظ", icon: "🛡️", surahs: [1, 2, 112, 113, 114], desc: "الفاتحة، البقرة، والمعوذات" },
     { title: "السكينة والطمأنينة", icon: "✨", surahs: [36, 55, 56, 67, 94], desc: "يس، الرحمن، الملك، الشرح" },
