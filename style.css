@@ -286,21 +286,5 @@ body.dark-mode .daily-text {
     color: var(--dark-teal);
     box-shadow: 0 0 10px var(--gold);
 }
-.topics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 15px;
-    padding: 20px;
-    direction: rtl;
-}
 
-.topic-card {
-    background: #fdfdfd;
-    border: 1px solid #eee;
-    border-bottom: 4px solid #c5a059;
-    border-radius: 15px;
-    padding: 20px 10px;
-    text-align: center;
-    cursor: pointer;
-}
 
