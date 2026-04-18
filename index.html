@@ -1,29 +1,401 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dark Realm: Survival</title>
+  <title>لعبة الداما</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#000; display:flex; justify-content:center; align-items:center; width:100vw; height:100vh; overflow:hidden; }
-    #loading { position:fixed; inset:0; background:#05050f; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#cc8800; font-family:Georgia,serif; z-index:9999; transition:opacity 0.5s; }
-    #loading h1 { font-size:3rem; letter-spacing:6px; margin-bottom:12px; }
-    #loading p { color:#555; font-size:1rem; letter-spacing:3px; }
-    .bar-wrap { width:300px; height:4px; background:#222; border-radius:2px; margin-top:30px; }
-    .bar { height:4px; background:#cc8800; border-radius:2px; animation:loadBar 1.5s ease forwards; }
-    @keyframes loadBar { to { width:100%; } }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a2e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #eee;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      color: #e2b96f;
+      text-shadow: 0 2px 8px #0008;
+      letter-spacing: 2px;
+    }
+
+    #status {
+      font-size: 1.2rem;
+      margin-bottom: 14px;
+      padding: 8px 24px;
+      background: #16213e;
+      border-radius: 20px;
+      border: 2px solid #e2b96f44;
+      min-width: 220px;
+      text-align: center;
+    }
+
+    #board-container {
+      border: 4px solid #e2b96f;
+      border-radius: 8px;
+      box-shadow: 0 8px 40px #0009;
+      overflow: hidden;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(8, 70px);
+      grid-template-rows: repeat(8, 70px);
+    }
+
+    .cell {
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      position: relative;
+    }
+
+    .cell.light { background: #f0d9b5; }
+    .cell.dark  { background: #b58863; }
+    .cell.dark.valid-move {
+      background: #7fc97f;
+      cursor: pointer;
+    }
+    .cell.dark.valid-move::after {
+      content: '';
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(0,180,0,0.35);
+      border: 2px dashed #0a0;
+      position: absolute;
+    }
+
+    .piece {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      user-select: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .piece.red {
+      background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b);
+      border-color: #922b21;
+      box-shadow: 0 4px 12px #0007, inset 0 2px 4px #fff3;
+    }
+
+    .piece.black {
+      background: radial-gradient(circle at 35% 35%, #555, #111);
+      border-color: #000;
+      box-shadow: 0 4px 12px #0007, inset 0 2px 4px #fff2;
+    }
+
+    .piece.selected {
+      transform: scale(1.12);
+      box-shadow: 0 0 0 4px #ffe066, 0 4px 16px #0009;
+    }
+
+    .piece.king::after {
+      content: '♛';
+      font-size: 1.4rem;
+      position: absolute;
+      color: #ffe066;
+      text-shadow: 0 1px 4px #0008;
+    }
+
+    #controls {
+      margin-top: 16px;
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      padding: 10px 28px;
+      border: none;
+      border-radius: 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:active { transform: scale(0.96); }
+
+    #btn-reset {
+      background: #e2b96f;
+      color: #1a1a2e;
+    }
+    #btn-reset:hover { background: #f5d08a; }
+
+    #score {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 14px;
+      font-size: 1rem;
+    }
+
+    .score-box {
+      padding: 6px 20px;
+      border-radius: 12px;
+      border: 2px solid #e2b96f44;
+      background: #16213e;
+      text-align: center;
+    }
+
+    .score-box span { font-size: 1.4rem; font-weight: bold; }
+    .score-box.red-box span { color: #ff6b6b; }
+    .score-box.black-box span { color: #aaa; }
   </style>
 </head>
 <body>
-  <div id="loading">
-    <h1>DARK REALM</h1>
-    <p>SURVIVAL</p>
-    <div class="bar-wrap"><div class="bar"></div></div>
-  </div>
-  <div id="game-container"></div>
 
-  <script src="<https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js>"></script>
-  <script src="game.js"></script>
+<h1>♟ لعبة الداما ♟</h1>
+
+<div id="score">
+  <div class="score-box red-box">
+    الأحمر: <span id="red-captured">0</span>
+  </div>
+  <div class="score-box black-box">
+    الأسود: <span id="black-captured">0</span>
+  </div>
+</div>
+
+<div id="status">دور اللاعب الأحمر</div>
+
+<div id="board-container">
+  <div id="board"></div>
+</div>
+
+<div id="controls">
+  <button id="btn-reset">بدء لعبة جديدة</button>
+</div>
+
+<script>
+const EMPTY = 0, RED = 1, BLACK = 2, RED_KING = 3, BLACK_KING = 4;
+
+let board = [], currentPlayer, selectedCell, validMoves, mustJump, jumpedFrom;
+let redCaptured = 0, blackCaptured = 0;
+
+function initBoard() {
+  board = Array.from({length: 8}, () => Array(8).fill(EMPTY));
+  for (let r = 0; r < 3; r++)
+    for (let c = 0; c < 8; c++)
+      if ((r + c) % 2 === 1) board[r][c] = BLACK;
+  for (let r = 5; r < 8; r++)
+    for (let c = 0; c < 8; c++)
+      if ((r + c) % 2 === 1) board[r][c] = RED;
+  currentPlayer = RED;
+  selectedCell = null;
+  validMoves = [];
+  mustJump = false;
+  jumpedFrom = null;
+  redCaptured = 0;
+  blackCaptured = 0;
+  updateScoreDisplay();
+  checkForMandatoryJumps();
+  render();
+}
+
+function isRed(p)   { return p === RED   || p === RED_KING; }
+function isBlack(p) { return p === BLACK || p === BLACK_KING; }
+function isKing(p)  { return p === RED_KING || p === BLACK_KING; }
+function belongsTo(p, player) {
+  return player === RED ? isRed(p) : isBlack(p);
+}
+
+function getMovesForPiece(r, c, jumpOnly = false) {
+  const piece = board[r][c];
+  if (!piece) return [];
+  const moves = [];
+  const dirs = [];
+  if (isRed(piece) || isKing(piece)) dirs.push([-1, -1], [-1, 1]);
+  if (isBlack(piece) || isKing(piece)) dirs.push([1, -1], [1, 1]);
+
+  for (const [dr, dc] of dirs) {
+    const nr = r + dr, nc = c + dc;
+    if (nr < 0 || nr > 7 || nc < 0 || nc > 7) continue;
+    const target = board[nr][nc];
+    if (!jumpOnly && target === EMPTY) {
+      moves.push({fromR: r, fromC: c, toR: nr, toC: nc, jump: false});
+    } else if (target !== EMPTY && !belongsTo(target, currentPlayer)) {
+      const jr = nr + dr, jc = nc + dc;
+      if (jr >= 0 && jr <= 7 && jc >= 0 && jc <= 7 && board[jr][jc] === EMPTY) {
+        moves.push({fromR: r, fromC: c, toR: jr, toC: jc, jump: true, capR: nr, capC: nc});
+      }
+    }
+  }
+  return moves;
+}
+
+function checkForMandatoryJumps() {
+  mustJump = false;
+  for (let r = 0; r < 8; r++)
+    for (let c = 0; c < 8; c++)
+      if (belongsTo(board[r][c], currentPlayer))
+        if (getMovesForPiece(r, c, true).length > 0) { mustJump = true; return; }
+}
+
+function selectPiece(r, c) {
+  if (!belongsTo(board[r][c], currentPlayer)) return;
+  const moves = getMovesForPiece(r, c, mustJump);
+  if (mustJump && moves.filter(m => m.jump).length === 0) return;
+  selectedCell = {r, c};
+  validMoves = mustJump ? moves.filter(m => m.jump) : moves;
+  render();
+}
+
+function movePiece(toR, toC) {
+  const move = validMoves.find(m => m.toR === toR && m.toC === toC);
+  if (!move) return;
+
+  const piece = board[move.fromR][move.fromC];
+  board[move.toR][move.toC] = piece;
+  board[move.fromR][move.fromC] = EMPTY;
+
+  if (move.jump) {
+    board[move.capR][move.capC] = EMPTY;
+    if (isRed(piece)) blackCaptured++;
+    else redCaptured++;
+    updateScoreDisplay();
+  }
+
+  // Promotion to king
+  if (piece === RED && move.toR === 0)   board[move.toR][move.toC] = RED_KING;
+  if (piece === BLACK && move.toR === 7) board[move.toR][move.toC] = BLACK_KING;
+
+  // Check for multi-jump
+  if (move.jump) {
+    const newPiece = board[move.toR][move.toC];
+    const furtherJumps = getMovesForPiece(move.toR, move.toC, true).filter(m => m.jump);
+    // No multi-jump after promotion
+    const justPromoted = (piece === RED && move.toR === 0) || (piece === BLACK && move.toR === 7);
+    if (furtherJumps.length > 0 && !justPromoted) {
+      mustJump = true;
+      selectedCell = {r: move.toR, c: move.toC};
+      validMoves = furtherJumps;
+      render();
+      return;
+    }
+  }
+
+  switchPlayer();
+}
+
+function switchPlayer() {
+  currentPlayer = currentPlayer === RED ? BLACK : RED;
+  selectedCell = null;
+  validMoves = [];
+  checkForMandatoryJumps();
+  render();
+  checkWin();
+}
+
+function checkWin() {
+  let redPieces = 0, blackPieces = 0;
+  for (let r = 0; r < 8; r++)
+    for (let c = 0; c < 8; c++) {
+      if (isRed(board[r][c])) redPieces++;
+      if (isBlack(board[r][c])) blackPieces++;
+    }
+
+  if (redPieces === 0) { setStatus('🎉 اللاعب الأسود فاز!'); disableBoard(); return; }
+  if (blackPieces === 0) { setStatus('🎉 اللاعب الأحمر فاز!'); disableBoard(); return; }
+
+  // Check if current player has any moves
+  let hasMove = false;
+  for (let r = 0; r < 8 && !hasMove; r++)
+    for (let c = 0; c < 8 && !hasMove; c++)
+      if (belongsTo(board[r][c], currentPlayer))
+        if (getMovesForPiece(r, c).length > 0) hasMove = true;
+
+  if (!hasMove) {
+    const winner = currentPlayer === RED ? 'الأسود' : 'الأحمر';
+    setStatus(`🎉 اللاعب ${winner} فاز!`);
+    disableBoard();
+  }
+}
+
+let boardDisabled = false;
+function disableBoard() { boardDisabled = true; }
+
+function setStatus(msg) {
+  document.getElementById('status').textContent = msg;
+}
+
+function updateScoreDisplay() {
+  document.getElementById('red-captured').textContent = redCaptured;
+  document.getElementById('black-captured').textContent = blackCaptured;
+}
+
+function render() {
+  if (!boardDisabled) {
+    const player = currentPlayer === RED ? 'الأحمر' : 'الأسود';
+    const jumpMsg = mustJump ? ' (يجب القفز!)' : '';
+    setStatus(`دور اللاعب ${player}${jumpMsg}`);
+  }
+
+  const boardEl = document.getElementById('board');
+  boardEl.innerHTML = '';
+
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 8; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'cell ' + ((r + c) % 2 === 0 ? 'light' : 'dark');
+
+      const isValid = validMoves.some(m => m.toR === r && m.toC === c);
+      if (isValid) cell.classList.add('valid-move');
+
+      const piece = board[r][c];
+      if (piece !== EMPTY) {
+        const pieceEl = document.createElement('div');
+        pieceEl.className = 'piece ' + (isRed(piece) ? 'red' : 'black');
+        if (isKing(piece)) pieceEl.classList.add('king');
+        if (selectedCell && selectedCell.r === r && selectedCell.c === c)
+          pieceEl.classList.add('selected');
+
+        pieceEl.addEventListener('click', () => {
+          if (boardDisabled) return;
+          if (selectedCell && isValid) {
+            movePiece(r, c);
+          } else {
+            selectPiece(r, c);
+          }
+        });
+        cell.appendChild(pieceEl);
+      }
+
+      if (isValid) {
+        cell.addEventListener('click', () => {
+          if (boardDisabled) return;
+          movePiece(r, c);
+        });
+      }
+
+      boardEl.appendChild(cell);
+    }
+  }
+}
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  boardDisabled = false;
+  initBoard();
+});
+
+initBoard();
+</script>
 </body>
 </html>
